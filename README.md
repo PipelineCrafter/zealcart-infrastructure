@@ -1,6 +1,8 @@
 # 🚀 ZealCart Infrastructure
 
-A production-style AWS Infrastructure project built using **Terraform** with reusable modules. This project demonstrates a highly available architecture following DevOps and Infrastructure as Code (IaC) best practices.
+![ZealCart AWS Architecture](diagrams/zealcart-architecture.png)
+
+ZealCart is a production-style AWS infrastructure built with modular Terraform, featuring high availability across two Availability Zones, secure private networking, Auto Scaling, Bastion administration, and Amazon RDS MySQL.
 
 ## Architecture
 
