@@ -1,37 +1,40 @@
 # 🚀 ZealCart Infrastructure
 
-![ZealCart AWS Architecture](diagrams/zealcart-architecture.png)
+![ZealCart AWS Architecture](diagrams/zealcart-architecture-v2.png)
 
-ZealCart is a production-style AWS infrastructure built with modular Terraform, featuring high availability across two Availability Zones, secure private networking, Auto Scaling, Bastion administration, and Amazon RDS MySQL.
+Production-style AWS infrastructure built with modular Terraform featuring High Availability, Route 53, ACM, HTTPS Load Balancing, Auto Scaling, Bastion Administration and Amazon RDS MySQL.
 
-## Architecture
+## 🏗 Architecture
 
 - VPC with Public & Private Subnets
 - Internet Gateway & NAT Gateway
-- Application Load Balancer (ALB)
-- Auto Scaling Group (ASG)
-- Launch Template
-- IAM Role & Instance Profile
-- Bastion Host
-- Amazon RDS MySQL
-- DB Subnet Group
+- Route 53 Public Hosted Zone
+- AWS Certificate Manager (ACM)
+- HTTPS Application Load Balancer
+- HTTP → HTTPS (301 Redirect)
+- Auto Scaling Group & Launch Template
+- Bastion Host for secure SSH access
+- Amazon RDS MySQL (Private Subnets)
 - Security Group based communication
 
-## AWS Services Used
+## ☁ AWS Services Used
 
 - Amazon VPC
 - Amazon EC2
-- Auto Scaling
-- Elastic Load Balancer
-- IAM
+- Auto Scaling Group
+- Elastic Load Balancer (ALB)
+- Route 53
+- AWS Certificate Manager (ACM)
 - Amazon RDS (MySQL)
+- IAM
 - NAT Gateway
 - Route Tables
+- Security Groups
 
 ## Project Structure
 
-```text
 modules/
+├── acm/
 ├── alb/
 ├── asg/
 ├── bastion/
@@ -45,20 +48,33 @@ modules/
 ├── private_route_table/
 ├── rds/
 ├── rds_security_group/
+├── route53/
 ├── route_table/
 ├── subnets/
 ├── target_group/
 └── vpc/
-```
 
-## Learning Outcomes
+## 🎯 Learning Outcomes
 
 - Modular Terraform Architecture
-- High Availability across two Availability Zones
-- IAM Role vs Instance Profile
-- Security Group based access control
-- Launch Template with Auto Scaling Group
-- Private RDS deployment using DB Subnet Group
+- Route 53 DNS & Hosted Zones
+- ACM DNS Validation
+- HTTPS Load Balancer Configuration
+- HTTP → HTTPS (301 Redirect)
+- Security Group Least Privilege Design
+- Auto Scaling with Launch Templates
+- Private RDS Deployment
+- Docker Bootstrap using User Data
+
+## ✨ Production Features
+
+- High Availability across 2 Availability Zones
+- Custom Domain (Route 53)
+- SSL/TLS Encryption using ACM
+- HTTPS-only public access
+- Automated DNS Certificate Validation
+- Infrastructure as Code with reusable Terraform modules
+- Dockerized application bootstrap
 
 ## Author
 
