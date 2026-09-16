@@ -87,19 +87,13 @@ module "target_group" {
   health_check_path = local.health_check_path
 }
 
-module "listener" {
-  source = "./modules/listener"
-
-  alb_arn          = module.alb.alb_arn
-  target_group_arn = module.target_group.target_group_arn
-}
-
 module "ec2_security_group" {
   source = "./modules/ec2_security_group"
 
-  vpc_id                = module.vpc.vpc_id
-  ec2_sg_name           = local.ec2_sg_name
-  alb_security_group_id = module.security_group.alb_security_group_id
+  vpc_id                    = module.vpc.vpc_id
+  ec2_sg_name               = local.ec2_sg_name
+  alb_security_group_id     = module.security_group.alb_security_group_id
+  bastion_security_group_id = module.bastion_security_group.bastion_security_group_id
 }
 
 module "asg" {
@@ -196,4 +190,29 @@ module "rds" {
   multi_az              = var.multi_az
   db_subnet_group_name  = module.db_subnet_group.db_subnet_group_name
   rds_security_group_id = module.rds_security_group.rds_security_group_id
+}
+
+module "acm" {
+  source = "./modules/acm"
+
+  sub_domain_name = var.sub_domain_name
+  hosted_zone_id  = module.route53.hosted_zone_id
+}
+
+module "listener" {
+  source = "./modules/listener"
+
+  alb_arn          = module.alb.alb_arn
+  target_group_arn = module.target_group.target_group_arn
+  certificate_arn  = module.acm.certificate_arn
+}
+
+module "route53" {
+  source = "./modules/route53"
+
+  domain_name     = var.domain_name
+  sub_domain_name = var.sub_domain_name
+
+  alb_dns_name = module.alb.alb_dns_name
+  alb_zone_id  = module.alb.alb_zone_id
 }

@@ -5,3 +5,7 @@ variable "alb_arn" {
 variable "target_group_arn" {
   type = string
 }
+
+variable "certificate_arn" {
+  type = string
+}

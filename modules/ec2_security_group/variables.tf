@@ -9,3 +9,7 @@ variable "ec2_sg_name" {
 variable "alb_security_group_id" {
   type = string
 }
+
+variable "bastion_security_group_id" {
+  type = string
+}
