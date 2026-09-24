@@ -1,0 +1,4 @@
+---
+db_port: 5432
+db_engine: PostgreSQL
+backup_enabled: true

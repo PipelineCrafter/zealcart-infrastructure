@@ -1,0 +1,15 @@
+---
+- name: Test Group and Host Variables
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Display complete host information
+      debug:
+        msg:
+          - "Host = {{ inventory_hostname }}"
+          - "App = {{ app_name }}"
+          - "Company = {{ company }}"
+          - "Role = {{ server_role }}"
+          - "Owner = {{ owner }}"
+          - "Timezone = {{ timezone }}"

@@ -19,7 +19,9 @@ variable "iam_instance_profile_name" {
 }
 
 variable "user_data" {
-  type = string
+  description = "Optional cloud-init script"
+  type        = string
+  default     = ""
 }
 
 variable "instance_name" {

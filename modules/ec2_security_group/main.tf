@@ -10,6 +10,14 @@ resource "aws_security_group" "this" {
     protocol        = "tcp"
     security_groups = [var.alb_security_group_id]
   }
+
+  ingress {
+  description = "HTTP from Internet (Lab)"
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+}
   
   ingress {
   description     = "SSH from Bastion"
@@ -17,6 +25,14 @@ resource "aws_security_group" "this" {
   to_port         = 22
   protocol        = "tcp"
   security_groups = [var.bastion_security_group_id]
+}
+
+ingress {
+  description = "SSH from My Laptop"
+  from_port   = 22
+  to_port     = 22
+  protocol    = "tcp"
+  cidr_blocks = [var.ssh_cidr]
 }
 
   egress  {

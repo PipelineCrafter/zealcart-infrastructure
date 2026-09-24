@@ -1,0 +1,23 @@
+---
+plugin: amazon.aws.aws_ec2
+
+regions:
+  - ap-south-1
+
+filters:
+  instance-state-name: running
+
+hostnames:
+  - tag:Name
+
+compose:
+  ansible_host: public_ip_address
+
+keyed_groups:
+  - prefix: role
+    key: tags.Name
+
+groups:
+  web: "'zealcart-app' in (tags.Name | default(''))"
+  database: "'zealcart-db' in (tags.Name | default(''))"
+

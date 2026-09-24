@@ -1,0 +1,7 @@
+
+---
+nginx_container_name: zealcart-nginx
+nginx_image: nginx:latest
+host_port: 80
+container_port: 80
+app_environment: Development

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ZealCart</title>
+    <style>
+        body{
+            font-family: Arial;
+            background:#0f172a;
+            color:white;
+            text-align:center;
+            padding-top:120px;
+        }
+        h1{color:{{ theme_color }};}
+        .card{
+            width:500px;
+            margin:auto;
+            background:#1e293b;
+            padding:30px;
+            border-radius:12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>ZealCart DevOps</h1>
+
+    <h2>Deployed Successfully!</h2>
+
+    <p><b>Environment:</b> {{ app_environment }}</p>
+
+    <p><b>Server:</b> {{ inventory_hostname }}</p>
+
+    <p><b>Managed By:</b> Ansible Role</p>
+</div>
+
+</body>
+</html>

@@ -11,7 +11,7 @@ resource "aws_launch_template" "this" {
     name = var.iam_instance_profile_name
   }
 
-  user_data = base64encode(var.user_data)
+  user_data = var.user_data != "" ? base64encode(var.user_data) : null
 
   tag_specifications {
     resource_type = "instance"

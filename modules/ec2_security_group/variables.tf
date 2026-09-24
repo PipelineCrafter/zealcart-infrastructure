@@ -13,3 +13,8 @@ variable "alb_security_group_id" {
 variable "bastion_security_group_id" {
   type = string
 }
+
+variable "ssh_cidr" {
+  description = "CIDR allowed for SSH access"
+  type        = string
+}

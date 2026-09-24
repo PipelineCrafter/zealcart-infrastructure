@@ -1,0 +1,30 @@
+
+---
+- name: Pull Nginx Docker image
+  community.docker.docker_image:
+    name: "{{ nginx_image }}"
+    source: pull
+
+- name: Create web root directory
+  ansible.builtin.file:
+    path: /opt/zealcart/html
+    state: directory
+    mode: "0755"
+
+- name: Deploy ZealCart homepage
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /opt/zealcart/html/index.html
+    mode: "0644"
+  notify: Restart Nginx Container
+
+- name: Run Nginx container
+  community.docker.docker_container:
+    name: "{{ nginx_container_name }}"
+    image: "{{ nginx_image }}"
+    state: started
+    restart_policy: always
+    published_ports:
+      - "{{ host_port }}:{{ container_port }}"
+    volumes:
+      - /opt/zealcart/html:/usr/share/nginx/html:ro

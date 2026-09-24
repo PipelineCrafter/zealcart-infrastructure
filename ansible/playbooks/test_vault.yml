@@ -1,0 +1,17 @@
+---
+- name: Test Ansible Vault
+  hosts: web
+  gather_facts: no
+
+  tasks:
+    - name: Display application name
+      debug:
+        msg: "Application = {{ app_name }}"
+
+    - name: Display database username
+      debug:
+        msg: "DB User = {{ db_username }}"
+
+    - name: Display database password
+      debug:
+        msg: "DB Password = {{ db_password }}"

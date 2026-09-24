@@ -68,24 +68,24 @@ module "security_group" {
   sg_name = local.alb_sg_name
 }
 
-module "alb" {
-  source = "./modules/alb"
+#module "alb" {
+#  source = "./modules/alb"
+#
+#  alb_name = local.alb_name
+#
+#  public_subnet_1_id = module.subnets.public_subnet_1_id
+#  public_subnet_2_id = module.subnets.public_subnet_2_id
+#
+#  alb_security_group_id = module.security_group.alb_security_group_id
+#}
 
-  alb_name = local.alb_name
-
-  public_subnet_1_id = module.subnets.public_subnet_1_id
-  public_subnet_2_id = module.subnets.public_subnet_2_id
-
-  alb_security_group_id = module.security_group.alb_security_group_id
-}
-
-module "target_group" {
-  source = "./modules/target_group"
-
-  vpc_id            = module.vpc.vpc_id
-  target_group_name = local.target_group_name
-  health_check_path = local.health_check_path
-}
+#module "target_group" {
+#  source = "./modules/target_group"
+#
+#  vpc_id            = module.vpc.vpc_id
+#  target_group_name = local.target_group_name
+#  health_check_path = local.health_check_path
+#}
 
 module "ec2_security_group" {
   source = "./modules/ec2_security_group"
@@ -94,25 +94,26 @@ module "ec2_security_group" {
   ec2_sg_name               = local.ec2_sg_name
   alb_security_group_id     = module.security_group.alb_security_group_id
   bastion_security_group_id = module.bastion_security_group.bastion_security_group_id
+  ssh_cidr                  = var.ssh_cidr
 }
 
-module "asg" {
-  source = "./modules/asg"
-
-  asg_name           = local.asg_name
-  launch_template_id = module.launch_template.launch_template_id
-
-  private_subnet_1_id = module.subnets.private_subnet_1_id
-  private_subnet_2_id = module.subnets.private_subnet_2_id
-
-  target_group_arn = module.target_group.target_group_arn
-
-  min_size         = var.min_size
-  max_size         = var.max_size
-  desired_capacity = var.desired_capacity
-
-  instance_name = local.instance_name
-}
+#module "asg" {
+#  source = "./modules/asg"
+#
+#  asg_name           = local.asg_name
+#  launch_template_id = module.launch_template.launch_template_id
+#
+#  private_subnet_1_id = module.subnets.private_subnet_1_id
+#  private_subnet_2_id = module.subnets.private_subnet_2_id
+#
+#  target_group_arn = module.target_group.target_group_arn
+#
+#  min_size         = var.min_size
+#  max_size         = var.max_size
+#  desired_capacity = var.desired_capacity
+#
+#  instance_name = local.instance_name
+#}
 
 module "iam" {
   source = "./modules/iam"
@@ -121,23 +122,20 @@ module "iam" {
   instance_profile_name = local.instance_profile_name
 }
 
-module "launch_template" {
-  source = "./modules/launch_template"
-
-  ami_id        = var.ami_id
-  instance_type = var.instance_type
-  key_name      = var.key_name
-
-  ec2_security_group_id = module.ec2_security_group.ec2_security_group_id
-
-  iam_instance_profile_name = module.iam.instance_profile_name
-
-  user_data = file("${path.module}/userdata.sh")
-
-  instance_name = local.instance_name
-
-  launch_template_name = local.launch_template_name
-}
+#module "launch_template" {
+#  source = "./modules/launch_template"
+#
+#  ami_id        = var.ami_id
+#  instance_type = var.instance_type
+#  key_name      = var.key_name
+#
+#  ec2_security_group_id = module.ec2_security_group.ec2_security_group_id
+#
+#  iam_instance_profile_name = module.iam.instance_profile_name
+#  instance_name = local.instance_name
+#
+#  launch_template_name = local.launch_template_name
+#}
 
 module "bastion_security_group" {
   source = "./modules/bastion_security_group"
@@ -148,71 +146,117 @@ module "bastion_security_group" {
 
 }
 
-module "bastion" {
-  source = "./modules/bastion"
+#module "bastion" {
+#  source = "./modules/bastion"
+#
+#  public_subnet_id          = module.subnets.public_subnet_1_id
+#  bastion_security_group_id = module.bastion_security_group.bastion_security_group_id
+#  bastion_name              = local.bastion_name
+#  ami_id                    = var.ami_id
+#  instance_type             = var.instance_type
+#  key_name                  = var.key_name
+#}
 
-  public_subnet_id          = module.subnets.public_subnet_1_id
-  bastion_security_group_id = module.bastion_security_group.bastion_security_group_id
-  bastion_name              = local.bastion_name
-  ami_id                    = var.ami_id
-  instance_type             = var.instance_type
-  key_name                  = var.key_name
+
+#module "rds_security_group" {
+#  source = "./modules/rds_security_group"
+#
+#  vpc_id                = module.vpc.vpc_id
+#  rds_sg_name           = local.rds_sg_name
+#  ec2_security_group_id = module.ec2_security_group.ec2_security_group_id
+#}
+
+
+#module "db_subnet_group" {
+#  source = "./modules/db_subnet_group"
+#
+#  db_subnet_group_name = local.db_subnet_group_name
+#  private_subnet_1_id  = module.subnets.private_subnet_1_id
+#  private_subnet_2_id  = module.subnets.private_subnet_2_id
+#}
+
+
+#module "rds" {
+#  source = "./modules/rds"
+#
+#  db_identifier         = local.rds_name
+#  db_name               = var.db_name
+#  db_username           = var.db_username
+#  db_password           = var.db_password
+#  db_instance_class     = var.db_instance_class
+#  engine_version        = var.engine_version
+#  multi_az              = var.multi_az
+#  db_subnet_group_name  = module.db_subnet_group.db_subnet_group_name
+#  rds_security_group_id = module.rds_security_group.rds_security_group_id
+#}
+
+#module "acm" {
+#  source = "./modules/acm"
+#
+#  sub_domain_name = var.sub_domain_name
+#  hosted_zone_id  = module.route53.hosted_zone_id
+#}
+
+#module "listener" {
+#  source = "./modules/listener"
+#
+#  alb_arn          = module.alb.alb_arn
+#  target_group_arn = module.target_group.target_group_arn
+#  certificate_arn  = module.acm.certificate_arn
+#}
+
+#module "route53" {
+#  source = "./modules/route53"
+#
+#  domain_name     = var.domain_name
+#  sub_domain_name = var.sub_domain_name
+#
+#  alb_dns_name = module.alb.alb_dns_name
+#  alb_zone_id  = module.alb.alb_zone_id
+#}
+
+
+############################################
+# Ansible Lab EC2 - App Server
+############################################
+
+module "app_ec2" {
+  source = "./modules/ec2_lab"
+
+  name          = "zealcart-app"
+  ami_id        = var.ami_id
+  instance_type = var.instance_type
+  key_name      = var.key_name
+
+  subnet_id         = module.subnets.public_subnet_1_id
+  security_group_id = module.ec2_security_group.ec2_security_group_id
 }
 
+############################################
+# Ansible Lab EC2 - DB Server
+############################################
 
-module "rds_security_group" {
-  source = "./modules/rds_security_group"
+module "db_ec2" {
+  source = "./modules/ec2_lab"
 
-  vpc_id                = module.vpc.vpc_id
-  rds_sg_name           = local.rds_sg_name
-  ec2_security_group_id = module.ec2_security_group.ec2_security_group_id
+  name          = "zealcart-db"
+  ami_id        = var.ami_id
+  instance_type = var.instance_type
+  key_name      = var.key_name
+
+  subnet_id         = module.subnets.public_subnet_2_id
+  security_group_id = module.ec2_security_group.ec2_security_group_id
 }
 
+############################################
+# Ansible Provisioner
+############################################
 
-module "db_subnet_group" {
-  source = "./modules/db_subnet_group"
+module "ansible_provisioner" {
+  source = "./modules/ansible_provisioner"
 
-  db_subnet_group_name = local.db_subnet_group_name
-  private_subnet_1_id  = module.subnets.private_subnet_1_id
-  private_subnet_2_id  = module.subnets.private_subnet_2_id
-}
-
-
-module "rds" {
-  source = "./modules/rds"
-
-  db_identifier         = local.rds_name
-  db_name               = var.db_name
-  db_username           = var.db_username
-  db_password           = var.db_password
-  db_instance_class     = var.db_instance_class
-  engine_version        = var.engine_version
-  multi_az              = var.multi_az
-  db_subnet_group_name  = module.db_subnet_group.db_subnet_group_name
-  rds_security_group_id = module.rds_security_group.rds_security_group_id
-}
-
-module "acm" {
-  source = "./modules/acm"
-
-  sub_domain_name = var.sub_domain_name
-  hosted_zone_id  = module.route53.hosted_zone_id
-}
-
-module "listener" {
-  source = "./modules/listener"
-
-  alb_arn          = module.alb.alb_arn
-  target_group_arn = module.target_group.target_group_arn
-  certificate_arn  = module.acm.certificate_arn
-}
-
-module "route53" {
-  source = "./modules/route53"
-
-  domain_name     = var.domain_name
-  sub_domain_name = var.sub_domain_name
-
-  alb_dns_name = module.alb.alb_dns_name
-  alb_zone_id  = module.alb.alb_zone_id
+  depends_on = [
+    module.app_ec2,
+    module.db_ec2
+  ]
 }
