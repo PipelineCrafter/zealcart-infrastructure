@@ -1,82 +1,133 @@
 # 🚀 ZealCart Infrastructure
 
-![ZealCart AWS Architecture](diagrams/zealcart-architecture-v2.png)
+Production-style AWS infrastructure automated with **Terraform + Ansible** featuring High Availability, HTTPS, Dynamic Inventory, Docker provisioning, and Infrastructure as Code.
 
-Production-style AWS infrastructure built with modular Terraform featuring High Availability, Route 53, ACM, HTTPS Load Balancing, Auto Scaling, Bastion Administration and Amazon RDS MySQL.
+![Architecture](diagrams/zealcart-architecture-v2.png)
+
+---
 
 ## 🏗 Architecture
 
-- VPC with Public & Private Subnets
-- Internet Gateway & NAT Gateway
-- Route 53 Public Hosted Zone
-- AWS Certificate Manager (ACM)
-- HTTPS Application Load Balancer
-- HTTP → HTTPS (301 Redirect)
-- Auto Scaling Group & Launch Template
-- Bastion Host for secure SSH access
-- Amazon RDS MySQL (Private Subnets)
-- Security Group based communication
+Terraform provisions the infrastructure while Ansible automatically configures the servers.
+
+**Workflow**
+
+Terraform → AWS EC2 → Ansible Dynamic Inventory → Docker → Nginx → ZealCart
+
+---
 
 ## ☁ AWS Services Used
 
 - Amazon VPC
 - Amazon EC2
 - Auto Scaling Group
-- Elastic Load Balancer (ALB)
+- Application Load Balancer
 - Route 53
 - AWS Certificate Manager (ACM)
 - Amazon RDS (MySQL)
 - IAM
 - NAT Gateway
-- Route Tables
 - Security Groups
 
-## Project Structure
+---
 
-modules/
-├── acm/
-├── alb/
-├── asg/
-├── bastion/
-├── bastion_security_group/
-├── db_subnet_group/
-├── ec2_security_group/
-├── iam/
-├── launch_template/
-├── listener/
-├── nat/
-├── private_route_table/
-├── rds/
-├── rds_security_group/
-├── route53/
-├── route_table/
-├── subnets/
-├── target_group/
-└── vpc/
+## ⚙️ DevOps Stack
 
-## 🎯 Learning Outcomes
+| Layer | Technology |
+|--------|------------|
+| Infrastructure | Terraform |
+| Configuration | Ansible |
+| Containerization | Docker |
+| Web Server | Nginx |
+| Cloud | AWS |
 
-- Modular Terraform Architecture
-- Route 53 DNS & Hosted Zones
-- ACM DNS Validation
-- HTTPS Load Balancer Configuration
-- HTTP → HTTPS (301 Redirect)
-- Security Group Least Privilege Design
-- Auto Scaling with Launch Templates
-- Private RDS Deployment
-- Docker Bootstrap using User Data
+---
+
+## 📁 Project Structure
+
+```text
+.
+├── ansible/
+│   ├── inventories/
+│   ├── playbooks/
+│   ├── roles/
+│   ├── group_vars/
+│   └── host_vars/
+├── modules/
+│   ├── vpc/
+│   ├── alb/
+│   ├── asg/
+│   ├── launch_template/
+│   ├── iam/
+│   ├── rds/
+│   └── ...
+├── diagrams/
+└── main.tf
+```
+
+---
 
 ## ✨ Production Features
 
-- High Availability across 2 Availability Zones
-- Custom Domain (Route 53)
-- SSL/TLS Encryption using ACM
-- HTTPS-only public access
-- Automated DNS Certificate Validation
-- Infrastructure as Code with reusable Terraform modules
-- Dockerized application bootstrap
+### Terraform
 
-## Author
+- Modular Infrastructure as Code
+- High Availability across 2 AZs
+- Route 53 custom domain
+- ACM SSL/TLS certificates
+- HTTPS Load Balancer
+- Auto Scaling Group
+- Private RDS deployment
 
-**Abdul Khadar Zeelan**  
-DevOps Engineer | AWS | Terraform
+### Ansible
+
+- Dynamic AWS Inventory using EC2 tags
+- Reusable Ansible Roles
+- Jinja2 Templates
+- Handlers for service restarts
+- Ansible Vault for secret management
+- Automated Docker installation
+- Nginx deployment using playbooks
+
+---
+
+## 🚀 Automated Deployment
+
+Provision infrastructure:
+
+```bash
+terraform apply
+```
+
+Terraform automatically triggers Ansible:
+
+```bash
+ansible-playbook playbooks/install_docker.yml
+ansible-playbook playbooks/deploy_nginx.yml
+```
+
+Result:
+
+- EC2 instances provisioned
+- Docker installed
+- Nginx container deployed
+- ZealCart application running automatically
+
+---
+
+## 🎯 Learning Outcomes
+
+- Modular Terraform Design
+- Dynamic Ansible Inventory
+- Configuration Management
+- Docker Automation
+- Infrastructure + Configuration Integration
+- Production-style DevOps Workflow
+
+---
+
+## 👨‍💻 Author
+
+**Abdul Khadar Zeelan**
+
+DevOps Engineer | AWS | Terraform | Ansible
